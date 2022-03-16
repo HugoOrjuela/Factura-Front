@@ -146,6 +146,7 @@ const addFactura = async () => {
     title.innerHTML = 'Agregar Factura';
     document.getElementById('formModal').reset();
     document.getElementById('divDetalle').setAttribute('hidden', true);
+    document.getElementById('pago').innerHTML = comboGeneric(arrTipoPago, 'name', true);
     flagModificarFactura = false;
     myModal.show();
 }
