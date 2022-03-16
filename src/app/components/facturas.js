@@ -67,8 +67,6 @@ const loadTableFactura = async () => {
             <tbody>${noFacturas}</tbody>
         </table>`;
     }
-
-    document.getElementById('pago').innerHTML = comboGeneric(arrTipoPago, 'name', true);
 }
 
 const loadTableDetalle = async id => {
@@ -217,8 +215,8 @@ const dataUpdate = async (lista) => {
     document.getElementById('idFactura').value = lista.id;
     document.getElementById('numero').value = lista.numero;
     document.getElementById('fecha').value = lista.fecha.split("T")[0];
-    document.getElementById('pago').value = lista.pago;
     document.getElementById('documento').value = lista.documento;
+    document.getElementById('pago').innerHTML = comboGeneric(arrTipoPago, 'name', true, lista.pago);
     document.getElementById('nombre').value = lista.nombre;
     document.getElementById('subtotal').value = lista.subtotal.toFixed(2);
     document.getElementById('descuento').value = lista.descuento;
