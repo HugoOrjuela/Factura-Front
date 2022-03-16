@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="dist/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="src/app/styles/main.css" rel="stylesheet">
+    <title>Facturas</title>
+</head>
+
+<body class="background-principal">
+
+    <div class="p-5">
+        <section>
+            <div class="d-flex flex-column justify-content-center mt-4">
+                <h2 class="text-center fw-bolder text-uppercase font-monospace text-muted">Listado de facturas</h2>
+            </div>
+
+            <div class="p-4 shadow rounded">
+                <button class="btn btn-sm btn-success px-5 my-2" type="button" onClick="addFactura()">Agregar</button>
+                <button class="btn btn-sm btn-secondary px-5 my-2" type="button"
+                    onClick="loadTableFactura()">Refrescar</button>
+                <div id="divGeneral" class="d-flex flex-column justify-content-center table-responsive"></div>
+            </div>
+        </section>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <form id="formModal">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label class="form-label">Número Factura</label>
+                                        <input type="number" min="0" class="form-control" id="numero" name="numero">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label class="form-label">Fecha Factura</label>
+                                        <input type="date" class="form-control" id="fecha" name="fecha">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tipo de Pago</label>
+                                        <select class="form-select" id="pago" name="pago"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label class="form-label">Documento Cliente</label>
+                                        <input type="number" min="0" class="form-control" id="documento" name="documento">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre Cliente</label>
+                                        <input type="text" class="form-control" id="nombre" name="nombre">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <section id="divDetalle" hidden="true">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <h3 class="fw-bolder">Detalles</h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <input type="hidden" class="form-control" id="idFactura" name="idFactura">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label class="form-label">Nombre Producto</label>
+                                                <select class="form-select" id="product" name="product">
+                                                    <option selected>Seleccionar</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label class="form-label">Cantidad</label>
+                                                <input type="number" min="1" value="1" class="form-control" id="cantidad" name="cantidad">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label class="form-label">Precio Unitario</label>
+                                                <input type="number" min="0" value="0" class="form-control" id="precioUnitario"
+                                                    name="precioUnitario">
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex align-items-end">
+                                            <div class="mb-3">
+                                                <button type="button" class="btn btn-success align-middle"
+                                                    onclick="saveDetalle()">Agregar Detalle</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div id="divDetalleTable" class="d-flex flex-column justify-content-center">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label class="form-label">Subtotal</label>
+                                            <input type="number" min="0" class="form-control" id="subtotal" name="subtotal"
+                                                value="0" step="0.01" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label class="form-label">Descuento</label>
+                                            <input type="number" min="0" class="form-control" id="descuento" name="descuento"
+                                                value="0" onchange="changeDescuento()" onblur="changeDescuento()"
+                                                onkeyup="changeDescuento()">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label class="form-label">IVA</label>
+                                            <input type="number" min="0" class="form-control" id="iva" name="iva" value="19"
+                                                readonly>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label class="form-label">Total Descuento</label>
+                                            <input type="number" min="0" class="form-control" id="totalDescuento"
+                                                name="totalDescuento" value="0" step="0.01" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label class="form-label">Total Impuesto</label>
+                                            <input type="number" min="0" class="form-control" id="totalImpuesto"
+                                                name="totalImpuesto" value="0" step="0.01" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label class="form-label">Total</label>
+                                            <input type="number" min="0" class="form-control" id="total" name="total" value="0"
+                                                step="0.01" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveFactura()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dist/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="dist/axios/axios.min.js"></script>
+    <script src="dist/moment/moment.min.js"></script>
+    <script src="src/app/api/api.js"></script>
+    <script src="src/app/api/routes.js"></script>
+    <script src="src/app/api/utils.js"></script>
+    <script src="src/app/components/facturas.js"></script>
+</body>
+
+</html>
